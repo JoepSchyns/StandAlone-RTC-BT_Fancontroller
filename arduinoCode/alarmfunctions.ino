@@ -1,5 +1,24 @@
 
+AlarmID_t setAlarm(StringSplitter *command ){
+  if(command->getItemCount() == 4){
+    return setAlarm(command->getItemAtIndex(0).toInt(),command->getItemAtIndex(1).toInt(),command->getItemAtIndex(2).toInt(),onOrOff(command->getItemAtIndex(3)));
+  }
+  else if(command->getItemCount() == 5){
+    return setAlarm(command->getItemAtIndex(0).toInt(),command->getItemAtIndex(1).toInt(),command->getItemAtIndex(2).toInt(),command->getItemAtIndex(3).toInt(),onOrOff(command->getItemAtIndex(4)));
+  }
+  return "-1";
+}
 
+const String ON_COMMAND = "on";
+
+boolean onOrOff(String input){
+  input.toLowerCase();
+  if(input.equals(ON_COMMAND)){
+    return true;
+  }else{
+    return false;
+  }
+}
 
 AlarmID_t setAlarm(int Hour,int Minute,int Second,boolean on){
   AlarmID_t id;
@@ -48,20 +67,5 @@ AlarmID_t setTimer(int Hour,int Minute,int Second,boolean on){
   return id;
 }
 
-void fanOn(){
-  fan(true);
-}
-void fanOff(){
-  fan(false);
-}
 
-void fan(boolean on){
-  Serial.print("fan on: ");
-  Serial.println(on);
-  if(on){
-    digitalWrite(FAN_PIN,255);
-  }else{
-    digitalWrite(FAN_PIN,0);
-  }
-}
 

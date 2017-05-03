@@ -1,34 +1,52 @@
+
+
+//timer libaries
 #include <Time.h>
 #include <TimeAlarms.h> //https://github.com/PaulStoffregen/TimeAlarms
+
+//rtc libaries
 #include <Wire.h>
 #include "RTClib.h"
+RTC_DS3231 rtc;
 
-//#include <QList.h> //https://github.com/SloCompTech/QList
+//bluetooth libaries
+#include <SoftwareSerial.h>
+#include <StringSplitter.h>
 
-#define FAN_PIN 16 //pin A2
-
+//#include <QList.h> //https://github.com/SloCompTech/QList //TODO
 //QList<AlarmID_t> alarms;
+
+
+boolean bluetoothCommunication = false;
+
+
 
 void setup() {
   Serial.begin(9600);
   
-  //set fan control pin
-  pinMode(FAN_PIN,OUTPUT);
-
+  setupFan();
   setupRTC();
+  setupBluetooth();
 
   //test timer
-  Serial.println(setTimer(0,0,10,true));
-  Serial.println(setTimer(0,0,15,false));
+//  Serial.println(setTimer(0,0,10,true));
+//  Serial.println(setTimer(0,0,15,false));
 
 
 }
 
 
 void loop() {
+    
+  loopBluetooth();
   
-  printTime();
-  Alarm.delay(1000);
+  
+  if(bluetoothCommunication){
+    Alarm.delay(0);
+  }else{
+    printTime();
+    Alarm.delay(1000);
+  }
   
 }
 

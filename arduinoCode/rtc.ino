@@ -1,5 +1,5 @@
 
-RTC_DS3231 rtc;
+
 
 void setupRTC(){
     if (! rtc.begin()) {
@@ -24,6 +24,9 @@ void setupRTC(){
   setSyncInterval(10000); // set the number of seconds between re-sync of time
 }
 
+void adjustRTC(int Year, int Month, int Day, int Hour,int Minute,int Second){
+  rtc.adjust(DateTime(Year, Month, 1, Hour, Minute, Second));
+}
 
 void printTime(){
   DateTime now = rtc.now();
