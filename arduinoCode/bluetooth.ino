@@ -57,14 +57,7 @@ void action(String input){
   }else if(input.substring(0,SET_TIME.length()).equals(SET_TIME)){
     setDate(input);
     
-    DateTime now = rtc.now();
-    
-    String result = "Date: " + now.year(); 
-    result += ":" + now.month(); 
-    result += ":" + now.day(); 
-    result += ":" + now.hour(); 
-    result += ":" + now.minute(); 
-    result += ":" + now.second();
+    String result = timeString();
     
     sendBluetooth(result);
   }

@@ -7,7 +7,6 @@
 //rtc libaries
 #include <Wire.h>
 #include "RTClib.h"
-RTC_DS3231 rtc;
 
 //bluetooth libaries
 #include <SoftwareSerial.h>

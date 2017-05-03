@@ -1,5 +1,5 @@
 
-
+RTC_DS3231 rtc;
 
 void setupRTC(){
     if (! rtc.begin()) {
@@ -42,6 +42,19 @@ void printTime(){
   Serial.print(':');
   Serial.print(now.second(), DEC);
   Serial.println();
+}
+
+String timeString(){
+  DateTime now = rtc.now();
+    
+    String result = "Date: " + now.year(); 
+    result += ":" + now.month(); 
+    result += ":" + now.day(); 
+    result += ":" + now.hour(); 
+    result += ":" + now.minute(); 
+    result += ":" + now.second();
+    
+    return result;
 }
 
 uint32_t syncProvider(){//function which sets up the RTC as the source of external time
