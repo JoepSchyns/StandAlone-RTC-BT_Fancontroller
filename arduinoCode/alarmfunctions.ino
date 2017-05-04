@@ -39,7 +39,6 @@ AlarmID_t setAlarm(int DayOfWeek,int Hour,int Minute,int Second,boolean on){
     id = Alarm.alarmRepeat(DayOfWeek, Hour, Minute, Second, fanOff);
   }
   
-  //alarms.pop_front(id);
   return id;
 }
 AlarmID_t setTimerOnce(int Hour,int Minute,int Second,boolean on){
@@ -49,8 +48,6 @@ AlarmID_t setTimerOnce(int Hour,int Minute,int Second,boolean on){
   }else{
     id = Alarm.timerOnce( Hour, Minute,Second, fanOff);
   }
-  
-  //alarms.pop_front(id);
   return id;
 }
 
@@ -62,10 +59,25 @@ AlarmID_t setTimer(int Hour,int Minute,int Second,boolean on){
   }else{
     id = Alarm.timerRepeat( Hour, Minute,Second, fanOff);
   }
-  
-  //alarms.pop_front(id);
   return id;
 }
+struct AlarmInfo{
+  AlarmID_t id;
+  time_t value;
+  dtAlarmPeriod_t type;
+};
 
+struct AlarmInfo* getAlarmInfo(){
+  int amountOfAlarms = (int)Alarm.count();
+  struct AlarmInfo alarmInfo[amountOfAlarms];
+  
+  for(int i = 0; i < amountOfAlarms;i++){
+    AlarmID_t id = (AlarmID_t)i;
+    alarmInfo[i].id = id;
+    alarmInfo[i].value = Alarm.read(id);
+    alarmInfo[i].type = Alarm.readType(id);
+  }
+  return alarmInfo;
+}
 
 

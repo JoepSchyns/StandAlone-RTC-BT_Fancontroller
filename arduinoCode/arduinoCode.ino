@@ -12,8 +12,7 @@
 #include <SoftwareSerial.h>
 #include <StringSplitter.h>
 
-//#include <QList.h> //https://github.com/SloCompTech/QList //TODO
-//QList<AlarmID_t> alarms;
+#include <EEPROM.h>
 
 
 boolean bluetoothCommunication = false;

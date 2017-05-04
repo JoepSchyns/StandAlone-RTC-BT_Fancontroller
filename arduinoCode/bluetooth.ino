@@ -38,6 +38,8 @@ const String FAN_ON = "fanOn";
 const String FAN_OFF = "fanOff";
 const String SET_FAN = "setFan";
 const String SET_TIME = "setTime";
+const String GET_FANS= "getFans";
+const String GET_TIME= "getTime";
 
 void action(String input){
   if(input.equals(FAN_ON)){
@@ -48,6 +50,19 @@ void action(String input){
     fanOff();
     sendBluetooth(FAN_OFF + "+OK");
   }
+  else if(input.equals(GET_TIME)){
+    String sender = timeString();
+    sendBluetooth(sender);
+  }
+  else if(input.equals(GET_FANS)){
+    struct AlarmInfo* alarmInfo = getAlarmInfo();
+    for(int i = 0; i < (int)Alarm.count(); i++){
+      String sender = "Alarm " + (String)alarmInfo[i].id;
+      sender += " time: " + time_tReadable(alarmInfo[i].value);
+      sender += " type: " + (String)alarmInfo[i].type;
+      sendBluetooth(sender);
+    }
+  }
   else if(input.substring(0,SET_FAN.length()).equals(SET_FAN)){
     
     String result = setFan(input);
@@ -57,9 +72,8 @@ void action(String input){
   }else if(input.substring(0,SET_TIME.length()).equals(SET_TIME)){
     setDate(input);
     
-    String result = timeString();
-    
-    sendBluetooth(result);
+    String sender = timeString();
+    sendBluetooth(sender);
   }
   
   else{
@@ -85,7 +99,7 @@ String setFan(String input){
     AlarmID_t alarmID = setAlarm(command);
 
     String result = "ID: " + (String)alarmID;
-    result += " Value: "  + (String)Alarm.read(alarmID);
+    result += " Value: "  + time_tReadable(Alarm.read(alarmID));
     result += " Type: " + (String)Alarm.readType(alarmID);
     
     return result;

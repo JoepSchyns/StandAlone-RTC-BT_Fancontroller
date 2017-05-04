@@ -47,14 +47,20 @@ void printTime(){
 String timeString(){
   DateTime now = rtc.now();
     
-    String result = "Date: " + now.year(); 
-    result += ":" + now.month(); 
-    result += ":" + now.day(); 
-    result += ":" + now.hour(); 
-    result += ":" + now.minute(); 
-    result += ":" + now.second();
+  String sender = "Date: ";
+  sender += String(now.year(),DEC) + "/"+String(now.month(),DEC) + "/"+String(now.day(),DEC);
+  sender += "   "+ String(now.hour(),DEC) + ":"+String(now.minute(),DEC) + ":"+String(now.second(),DEC);
     
-    return result;
+  return sender;
+}
+
+String time_tReadable(time_t t){
+  
+  String sender = String(hour(t),DEC) + ":";
+  sender += String(minute(t),DEC) + ":";
+  sender += String(second(t),DEC);
+  
+  return sender;
 }
 
 uint32_t syncProvider(){//function which sets up the RTC as the source of external time
