@@ -4,10 +4,10 @@ Stand-alone fan controller with realtime clock and adjustable via bluetooth
 Bluetooth Commands:
 ## Time
 * setTime{YEAR}:{MONTH}:{DAY}:{HOUR}:{MINUTE}:{SECOND}
-⋅⋅⋅set the date
+set the date
 * getTime
 
-⋅⋅⋅get the date
+get the date
 
 ## Fan Timers
 * setFan{DAY}:{HOUR}:{MINUTE}:{SECOND}:on
