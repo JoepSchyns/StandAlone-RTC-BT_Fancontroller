@@ -20,6 +20,8 @@ Turn on or off the fan on a specific time
 * SetFan{HOUR}:{MINUTE}:{SECOND}:on
 * SetFan{HOUR}:{MINUTE}:{SECOND}:off
 
+Remove fan timer
+* removeFan{ID}
 
-Get the current set fan timers 
+Get the current set fan timers in format:  ID TIME TYPE
  * getFans 
