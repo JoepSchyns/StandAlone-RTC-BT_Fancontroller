@@ -1,6 +1,6 @@
 
-#define BLUETOOTH_RX 10
-#define BLUETOOTH_TX 11
+#define BLUETOOTH_RX 5
+#define BLUETOOTH_TX 6
 
 #define NO_COMMUNICATION_TIME 50
 unsigned long inbetweenTime;
@@ -96,6 +96,7 @@ String setFan(String input){
   
   String commandString = input.substring(SET_FAN.length());
     StringSplitter *command = new StringSplitter(commandString, ':', 6);
+    Serial.println("test");
     AlarmID_t alarmID = setAlarm(command);
 
     String result = "ID: " + (String)alarmID;

@@ -69,6 +69,7 @@ struct AlarmInfo{
 
 struct AlarmInfo* getAlarmInfo(){
   int amountOfAlarms = (int)Alarm.count();
+//  AlarmInfo* alarmInfo = malloc(amountOfAlarms * sizeof *AlarmInfo);
   struct AlarmInfo alarmInfo[amountOfAlarms];
   
   for(int i = 0; i < amountOfAlarms;i++){

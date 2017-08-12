@@ -1,4 +1,4 @@
-#define FAN_PIN 16 //pin A2
+#define FAN_PIN 4 //pin A2
 
 void setupFan(){
   //set fan control pin
