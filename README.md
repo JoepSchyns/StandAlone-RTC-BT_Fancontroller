@@ -11,7 +11,8 @@ Bluetooth Commands:
 ## Fan Timers
 * setFan{DAY}:{HOUR}:{MINUTE}:{SECOND}:on
 * setFan{DAY}:{HOUR}:{MINUTE}:{SECOND}:off
-...turn on or off the fan on a day of the week on a specific time
+
+...turn on or off the fan on a day of the week on a specific time..
 
 * SetFan{HOUR}:{MINUTE}:{SECOND}:on
 * SetFan{HOUR}:{MINUTE}:{SECOND}:off
