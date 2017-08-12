@@ -61,24 +61,20 @@ AlarmID_t setTimer(int Hour,int Minute,int Second,boolean on){
   }
   return id;
 }
-struct AlarmInfo{
-  AlarmID_t id;
-  time_t value;
-  dtAlarmPeriod_t type;
-};
 
-struct AlarmInfo* getAlarmInfo(){
-  int amountOfAlarms = (int)Alarm.count();
-//  AlarmInfo* alarmInfo = malloc(amountOfAlarms * sizeof *AlarmInfo);
-  struct AlarmInfo alarmInfo[amountOfAlarms];
+void removeTimer(AlarmID_t id){
   
-  for(int i = 0; i < amountOfAlarms;i++){
-    AlarmID_t id = (AlarmID_t)i;
-    alarmInfo[i].id = id;
-    alarmInfo[i].value = Alarm.read(id);
-    alarmInfo[i].type = Alarm.readType(id);
+  int amountOfAlarms = (int)Alarm.count();
+  
+  Alarm.disable(id);
+
+  for(int i = (int)id; i < amountOfAlarms - 2; i++){ //reshuffle array
+    fans[i] = fans[i + 1];
   }
-  return alarmInfo;
+
+  fans[amountOfAlarms - 1] = EmptyAlarmInfo;
+  
+  
 }
 
 

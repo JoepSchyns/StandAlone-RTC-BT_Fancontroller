@@ -17,6 +17,15 @@
 
 boolean bluetoothCommunication = false;
 
+struct AlarmInfo{
+  AlarmID_t id;
+  time_t value;
+  dtAlarmPeriod_t type;
+};
+
+static const struct AlarmInfo EmptyAlarmInfo;
+
+struct AlarmInfo fans[dtNBR_ALARMS]; //save the alarms
 
 
 void setup() {
