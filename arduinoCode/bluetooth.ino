@@ -56,11 +56,15 @@ void action(String input) {
     sendBluetooth(sender);
   }
   else if (input.equals(GET_FANS)) {
-    for (int i = 0; i < (int)Alarm.count(); i++) {
-      String sender = "Alarm " + (String)fans[i].id;
-      sender += " time: " + time_tReadable(fans[i].value);
-      sender += " type: " + (String)fans[i].type;
-      sendBluetooth(sender);
+    for (int i = 0; i < dtNBR_ALARMS; i++) {
+
+      AlarmID_t ID = (AlarmID_t)i;
+
+      if (Alarm.Alarm[ID].Mode.isEnabled) { //only display fans that are enabled
+        String sender = fanInfo(ID);
+        sendBluetooth(sender);
+      }
+      
     }
   }
   else if (input.substring(0, SET_FAN.length()).equals(SET_FAN)) {
@@ -120,37 +124,48 @@ void setDate(String input) {
     return result;
   }**/
 
+ 
+
 String setFan(String input) {
 
   String result = "";
 
   int amountOfAlarms = (int)Alarm.count();
-  if (amountOfAlarms < dtNBR_ALARMS) //if is smaller than maximum amount of alarms
+  if (amountOfAlarms < dtNBR_ALARMS - 1) //if is smaller than maximum amount of alarms
   {
     String commandString = input.substring(SET_FAN.length());
     StringSplitter *command = new StringSplitter(commandString, ':', 6);
-    AlarmID_t alarmID = setAlarm(command);
+    AlarmID_t ID = setAlarm(command);
 
-
-    fans[amountOfAlarms].id = alarmID;
-    fans[amountOfAlarms].value = Alarm.read(alarmID);
-    fans[amountOfAlarms].type = Alarm.readType(alarmID);
-
-    result += "ID: " + (String)fans[amountOfAlarms].id;
-    result += " Value: "  + time_tReadable(fans[amountOfAlarms].value);
-    result += " Type: " + (String)fans[amountOfAlarms].type;
+    result = fanInfo(ID);
 
   } else
   {
-    result += "Max amount of fans(" + (String)dtNBR_ALARMS + ") is reached please remove one before adding a new fan";
+    result += "max fans reached";
   }
 
+  //save fans to memory
+  EEPROM.put(memAdress,Alarm.Alarm);
+  
   return result;
 }
 
 void sendBluetooth(String text) {
   bluetoothSerial.println(text);//comunicate to bluetoothchip
 }
+
+String fanInfo(AlarmID_t ID) {
+  String result;
+  result += "ID: " + (String)ID;
+  result += " isEnabled: " + onOrOff(Alarm.Alarm[ID].Mode.isEnabled);
+  result += " alarmType: " + (String)Alarm.Alarm[ID].Mode.alarmType;
+  //result += " onTickHandler: " + (String)Alarm.Alarm[ID].onTickHandler;
+  result += " time: " + time_tReadable(Alarm.Alarm[ID].value);
+  result += " nextTrigger: " + time_tReadable(Alarm.Alarm[ID].nextTrigger);
+
+  return result;
+}
+
 
 
 
