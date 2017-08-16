@@ -23,3 +23,4 @@ void static FansController::fan(boolean on) {
     digitalWrite(FAN_PIN, 0);
   }
 }
+

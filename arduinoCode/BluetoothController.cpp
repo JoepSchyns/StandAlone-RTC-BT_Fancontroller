@@ -27,10 +27,10 @@ void BluetoothController::loopBluetooth() {
   }
 
   if (bluetoothCommunication) { //if there is bluetooth comminication dont sleep for a second
-    //alarmController.delay(0);
+    alarmController.delay(0);
   } else {
     //rtcController.printTime();
-    //alarmController.delay(1000);
+    alarmController.delay(1000);
   }
 }
 
@@ -67,6 +67,7 @@ void BluetoothController::action(String input)
   else if (input.substring(0, SET_FAN.length()).equals(SET_FAN))
   {
     String commandString = input.substring(SET_FAN.length());
+    Serial.println(commandString);
     StringSplitter *command = new StringSplitter(commandString, ':', 6);
 
     int code = alarmController.setAlarm(command);
@@ -78,6 +79,8 @@ void BluetoothController::action(String input)
     } else {
       bluetoothSerial->println(alarmController.alarmInfo(code));
     }
+    delete command;
+    command = NULL;
   }
   else if (input.substring(0, SET_FAN.length()).equals(SET_FAN))
   {
@@ -87,6 +90,8 @@ void BluetoothController::action(String input)
     int code = alarmController.setAlarm(command);
     String result = fanCodeToString(code);
     bluetoothSerial->println(result);
+    delete command;
+    command = NULL;
   }
   else if (input.substring(0, SET_TIMER_FAN.length()).equals(SET_TIMER_FAN))
   {
@@ -96,6 +101,8 @@ void BluetoothController::action(String input)
     int code = alarmController.setTimer(command);
     String result = fanCodeToString(code);
     bluetoothSerial->println(result);
+    delete command;
+    command = NULL;
   }
   else if (input.substring(0, REMOVE_FANS.length()).equals(REMOVE_FANS))
   {
@@ -118,6 +125,8 @@ void BluetoothController::action(String input)
     rtcController.adjustRTC(command);
     String result = rtcController.timeString();
     bluetoothSerial->println(result);
+    delete command;
+    command = NULL;
   }
   else
   {

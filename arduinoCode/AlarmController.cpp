@@ -35,17 +35,12 @@ int AlarmController::setAlarm(StringSplitter *command) {
     result = setAlarm(command->getItemAtIndex(0).toInt(), command->getItemAtIndex(1).toInt(), command->getItemAtIndex(2).toInt(), command->getItemAtIndex(3).toInt(), onOrOff(command->getItemAtIndex(4)));
   }
   else {
-    return -1; //no such command for setting a alarm found
-  }
 
-  if(!RTCController::time_tReadable(Alarm.Alarm[result].value).equals(command->getItemAtIndex(0) + ":" + command->getItemAtIndex(1) + ":" + command->getItemAtIndex(2))){
-    Serial.println("null result try gain");
-    setAlarm(command);
+    return -1; //no such command for setting a alarm found
   }
 
   saveAlarms();
   return result;
-
 }
 
 int AlarmController::setAlarm(int Hour, int Minute, int Second, boolean on) {
