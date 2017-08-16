@@ -1,12 +1,12 @@
 #include "BluetoothController.h"
 
 BluetoothController::BluetoothController() {
-  
-  Serial.println("test2");
+  Serial.println("bluetooth controller init");
   bluetoothSerial->begin(9600);
 }
 
 void BluetoothController::loopBluetooth() {
+
   if (bluetoothSerial->available()) {
     inbetweenTime = millis();
     bluetoothCommunication = true;
@@ -27,10 +27,10 @@ void BluetoothController::loopBluetooth() {
   }
 
   if (bluetoothCommunication) { //if there is bluetooth comminication dont sleep for a second
-    alarmController.delay(0);
+    //alarmController.delay(0);
   } else {
-    rtcController.printTime();
-    alarmController.delay(1000);
+    //rtcController.printTime();
+    //alarmController.delay(1000);
   }
 }
 
@@ -45,6 +45,14 @@ void BluetoothController::action(String input)
     fansController.off();
     bluetoothSerial->println(FAN_OFF + OK_RESULT);
   }
+  else if (input.equals(MAX_FANS))
+  {
+    bluetoothSerial->println(MAX_FANS + "+" + dtNBR_ALARMS);
+  }
+  else if (input.equals(AMOUNT_FANS))
+  {
+    bluetoothSerial->println(AMOUNT_FANS + "+" + alarmController.count());
+  }
   else if (input.equals(GET_TIME))
   {
     String result = rtcController.timeString();
@@ -52,8 +60,9 @@ void BluetoothController::action(String input)
   }
   else if (input.equals(GET_FANS))
   {
-    String result = alarmController.getAlarms();
-    bluetoothSerial->println(result);
+    for (int ID = 0; ID < dtNBR_ALARMS; ID++) {
+      bluetoothSerial->println(alarmController.alarmInfo(ID));
+    }
   }
   else if (input.substring(0, SET_FAN.length()).equals(SET_FAN))
   {
@@ -67,7 +76,7 @@ void BluetoothController::action(String input)
     } else if (code == -2) {
       bluetoothSerial->println(SET_FAN + MAX_FANS_RESULT);
     } else {
-      bluetoothSerial->println(SET_FAN + OK_RESULT + "+" + alarmController.alarmInfo(code));
+      bluetoothSerial->println(alarmController.alarmInfo(code));
     }
   }
   else if (input.substring(0, SET_FAN.length()).equals(SET_FAN))
@@ -88,6 +97,11 @@ void BluetoothController::action(String input)
     String result = fanCodeToString(code);
     bluetoothSerial->println(result);
   }
+  else if (input.substring(0, REMOVE_FANS.length()).equals(REMOVE_FANS))
+  {
+    alarmController.removeAlarms();
+    bluetoothSerial->println(REMOVE_FANS + OK_RESULT);
+  }
   else if (input.substring(0, REMOVE_FAN.length()).equals(REMOVE_FAN))
   {
     String commandString = input.substring(REMOVE_FAN.length());
@@ -96,11 +110,7 @@ void BluetoothController::action(String input)
 
     bluetoothSerial->println(REMOVE_FAN + ID + OK_RESULT);
   }
-  else if (input.substring(0, REMOVE_FANS.length()).equals(REMOVE_FANS))
-  {
-    alarmController.removeAlarms();
-    bluetoothSerial->println(REMOVE_FANS + OK_RESULT);
-  }
+
   else if (input.substring(0, SET_TIME.length()).equals(SET_TIME))
   {
     String commandString = input.substring(SET_TIME.length());

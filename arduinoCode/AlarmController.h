@@ -30,13 +30,13 @@ class AlarmController {
 
   public:
     AlarmController();
-    String getAlarms();
     int setAlarm(StringSplitter *command);
     int setTimer(StringSplitter *command);
     void removeAlarms();
     void removeAlarm(int ID);
     String alarmInfo(int ID);
     void delay(int time);
+    int count();
 
 
 };

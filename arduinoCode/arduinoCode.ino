@@ -1,20 +1,23 @@
 
 
 #include "BluetoothController.h"
-BluetoothController bluetoothController;
+BluetoothController *bluetoothController;
 
 
 
 void setup() {
-  Serial.println("test0");
   Serial.begin(9600);
+   while (!Serial){
+    Serial.println("waiting for serial");
+   }
+   Serial.println("Start program");
+   bluetoothController = new BluetoothController();
   
 }
 
 
 void loop() {
-  Serial.println("test1");
-  //bluetoothController.loopBluetooth();
+  bluetoothController->loopBluetooth();
   
 }
 

@@ -1,6 +1,8 @@
+
 #include "FansController.h"
 
 FansController::FansController() {
+  Serial.println("fans controller init");
   //set fan control pin
   pinMode(FAN_PIN, OUTPUT);
 }

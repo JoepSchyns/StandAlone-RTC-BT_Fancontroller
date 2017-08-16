@@ -1,3 +1,5 @@
+
+
 #ifndef RTCController_h
 #define RTCController_h
 
@@ -5,15 +7,15 @@
 #include <Time.h>
 
 //rtc libaries
+#include <RTClib.h>
 #include <Wire.h>
-#include "RTClib.h"
 
 #include <StringSplitter.h>
 
 class RTCController {
   private:
-    RTC_DS3231 rtc;
-    uint32_t syncProvider();
+    static RTC_DS3231 rtc;
+    static uint32_t syncProvider();
     
   public:
     RTCController();

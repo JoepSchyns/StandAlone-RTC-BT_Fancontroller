@@ -2,12 +2,10 @@
 #include "AlarmController.h"
 
 AlarmController::AlarmController() {
-
+  Serial.println("alarm controller init");
   AlarmClass memAlarm[dtNBR_ALARMS];
 
   EEPROM.get(memAdress, memAlarm);
-  Serial.println("get Old fans");
-  Serial.println((String)memAlarm[0].Mode.alarmType);
 
   if (memAlarm != NULL ) { //if is a valid alarmClass parameter
 
@@ -22,24 +20,11 @@ AlarmController::AlarmController() {
   }
 }
 
-String AlarmController::getAlarms() {
-  String result;
-
-  for (int ID = 0; ID < dtNBR_ALARMS; ID++) {
-
-    if (Alarm.Alarm[ID].Mode.isEnabled) { //only display fans that are enabled
-      result +=  alarmInfo(ID) + "\n";
-    }
-
-  }
-
-  return result;
-}
 
 int AlarmController::setAlarm(StringSplitter *command) {
   int result;
 
-  if (Alarm.count() < dtNBR_ALARMS - 1) { //if is smaller than maximum amount of alarms
+  if (Alarm.count() >= dtNBR_ALARMS) { //if is smaller than maximum amount of alarms
     return -2;
   }
 
@@ -51,6 +36,11 @@ int AlarmController::setAlarm(StringSplitter *command) {
   }
   else {
     return -1; //no such command for setting a alarm found
+  }
+
+  if(!RTCController::time_tReadable(Alarm.Alarm[result].value).equals(command->getItemAtIndex(0) + ":" + command->getItemAtIndex(1) + ":" + command->getItemAtIndex(2))){
+    Serial.println("null result try gain");
+    setAlarm(command);
   }
 
   saveAlarms();
@@ -65,7 +55,6 @@ int AlarmController::setAlarm(int Hour, int Minute, int Second, boolean on) {
   } else {
     id = Alarm.alarmRepeat(Hour, Minute, Second, FansController::off);
   }
-  //alarms.pop_front(id);
   return id;
 }
 
@@ -103,15 +92,16 @@ int AlarmController::setTimer(int Hour, int Minute, int Second, boolean on) {
 }
 
 void AlarmController::removeAlarms() {
-  for (int id = 0; id < Alarm.count(); id++) {
+  for (int id = 0; id < dtNBR_ALARMS; id++) {
+    Alarm.free(id);
     removeAlarm(id);
   }
+  saveAlarms();
 }
 
 void AlarmController::removeAlarm(int id) {
   Alarm.free(id);
   saveAlarms();
-
 }
 
 boolean AlarmController::saveAlarms() {
@@ -120,13 +110,13 @@ boolean AlarmController::saveAlarms() {
 }
 
 String AlarmController::alarmInfo(int ID) {
-  String result;
-  result += "ID: " + (String)ID;
-  result += " isEnabled: " + Alarm.Alarm[ID].Mode.isEnabled;
-  result += " alarmType: " + (String)Alarm.Alarm[ID].Mode.alarmType;
-  //result += " onTickHandler: " + (String)Alarm.Alarm[ID].onTickHandler;
-  result += " time: " + RTCController::time_tReadable(Alarm.Alarm[ID].value);
-  result += " nextTrigger: " + RTCController::time_tReadable(Alarm.Alarm[ID].nextTrigger);
+  String result = "Fan;"+(String)ID;// + ";" + (String)Alarm.Alarm[ID].Mode.isEnabled + ";" + Alarm.Alarm[ID].Mode.alarmType + ";" + RTCController::time_tReadable(Alarm.Alarm[ID].value);
+
+
+    result += ";" + (String)Alarm.Alarm[ID].Mode.isEnabled;
+    result += ";" + (String)Alarm.Alarm[ID].Mode.alarmType;
+    result += ";" + RTCController::time_tReadable(Alarm.Alarm[ID].value);
+   // result += " nextTrigger: " + RTCController::time_tReadable(Alarm.Alarm[ID].nextTrigger);
 
   return result;
 }
@@ -151,3 +141,9 @@ String AlarmController::onOrOff(boolean input) { //inverse
 void AlarmController::delay(int time) {
   Alarm.delay(time);
 }
+
+int AlarmController::count() {
+  return Alarm.count();
+}
+
+
