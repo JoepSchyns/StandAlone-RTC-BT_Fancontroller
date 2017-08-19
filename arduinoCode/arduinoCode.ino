@@ -3,7 +3,7 @@
 #include "BluetoothController.h"
 BluetoothController *bluetoothController;
 
-
+int FansController::speed = 255;
 
 void setup() {
   Serial.begin(9600);

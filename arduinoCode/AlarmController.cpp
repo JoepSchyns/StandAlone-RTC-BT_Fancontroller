@@ -3,8 +3,9 @@
 
 AlarmController::AlarmController() {
   Serial.println("alarm controller init");
+  
   AlarmClass memAlarm[dtNBR_ALARMS];
-
+  int speed;
   EEPROM.get(memAdress, memAlarm);
 
   if (memAlarm != NULL ) { //if is a valid alarmClass parameter
@@ -46,9 +47,9 @@ int AlarmController::setAlarm(StringSplitter *command) {
 int AlarmController::setAlarm(int Hour, int Minute, int Second, boolean on) {
   int id;
   if (on) {
-    id = Alarm.alarmRepeat(Hour, Minute, Second, FansController::on);
+    id = Alarm.alarmRepeat(Hour, Minute, Second, fansController.on);
   } else {
-    id = Alarm.alarmRepeat(Hour, Minute, Second, FansController::off);
+    id = Alarm.alarmRepeat(Hour, Minute, Second, fansController.off);
   }
   return id;
 }
@@ -56,9 +57,9 @@ int AlarmController::setAlarm(int Hour, int Minute, int Second, boolean on) {
 int AlarmController::setAlarm(int DayOfWeek, int Hour, int Minute, int Second, boolean on) {
   int id;
   if (on) {
-    id = Alarm.alarmRepeat(DayOfWeek, Hour, Minute, Second, FansController::on);
+    id = Alarm.alarmRepeat(DayOfWeek, Hour, Minute, Second, fansController.on);
   } else {
-    id = Alarm.alarmRepeat(DayOfWeek, Hour, Minute, Second, FansController::off);
+    id = Alarm.alarmRepeat(DayOfWeek, Hour, Minute, Second, fansController.off);
   }
 
   return id;
@@ -79,12 +80,13 @@ int AlarmController::setTimer(StringSplitter *command ) {
 int AlarmController::setTimer(int Hour, int Minute, int Second, boolean on) {
   int id;
   if (on) {
-    id = Alarm.timerRepeat( Hour, Minute, Second, FansController::on);
+    id = Alarm.timerRepeat( Hour, Minute, Second, fansController.on);
   } else {
-    id = Alarm.timerRepeat( Hour, Minute, Second, FansController::off);
+    id = Alarm.timerRepeat( Hour, Minute, Second, fansController.off);
   }
   return id;
 }
+
 
 void AlarmController::removeAlarms() {
   for (int id = 0; id < dtNBR_ALARMS; id++) {
@@ -137,7 +139,7 @@ void AlarmController::delay(int time) {
   Alarm.delay(time);
 }
 
-int AlarmController::count() {
+int static AlarmController::count() {
   return Alarm.count();
 }
 

@@ -4,18 +4,18 @@
 
 #include "Arduino.h"
 
-#define FAN_PIN 4 //pin A2
+#define FAN_PIN 10 //pin A2
 
 class FansController {
   private:
-    void static fan(boolean on);
-
+    static void fan(boolean on);
   public:
     FansController();
-    void static on();
-    void static off();
-
-
+    static void on();
+    static void off();
+    static void setSpeed(int _speed);
+    static int speed;
+    
 };
 
 

@@ -19,6 +19,7 @@ const int memAdress = 0;
 
 class AlarmController {
   private:
+    
     const String ON_COMMAND = "on";
     const String OFF_COMMAND = "off";
     boolean saveAlarms();
@@ -27,6 +28,8 @@ class AlarmController {
     int setAlarm(int Hour, int Minute, int Second, boolean on);
     int setAlarm(int Day, int Hour, int Minute, int Second, boolean on);
     int setTimer(int Hour, int Minute, int Second, boolean on);
+    typedef void (*On_t)();
+    typedef void (*Off_t)();
 
   public:
     AlarmController();
@@ -36,9 +39,10 @@ class AlarmController {
     void removeAlarm(int ID);
     String alarmInfo(int ID);
     void delay(int time);
-    int count();
-
-
+    int static count();
+    
+    FansController fansController;
+    
 };
 
 #endif

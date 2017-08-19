@@ -37,13 +37,22 @@ void BluetoothController::loopBluetooth() {
 void BluetoothController::action(String input)
 {
   if (input.equals(FAN_ON)) {
-    fansController.on();
+     alarmController.fansController.on();
     bluetoothSerial->println(FAN_ON + OK_RESULT);
   }
   else if (input.equals(FAN_OFF))
   {
-    fansController.off();
+     alarmController.fansController.off();
     bluetoothSerial->println(FAN_OFF + OK_RESULT);
+  }
+    else if (input.substring(0, FAN_SPEED.length()).equals(FAN_SPEED))
+  {
+    String commandString = input.substring(FAN_SPEED.length());
+    
+    alarmController.fansController.setSpeed(commandString.toInt());
+    alarmController.fansController.off();
+    alarmController.fansController.on();
+    bluetoothSerial->println(FAN_SPEED + OK_RESULT);
   }
   else if (input.equals(MAX_FANS))
   {
