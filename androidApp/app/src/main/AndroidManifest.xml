@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <uses-sdk android:minSdkVersion="18"/>
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -35,6 +38,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fancontroller.joep.fan.Home" />
         </activity>
+
+        <service android:name=".DeviceConnectService" />
     </application>
 
 </manifest>

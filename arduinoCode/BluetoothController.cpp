@@ -10,6 +10,7 @@ void BluetoothController::loopBluetooth() {
   if (bluetoothSerial->available()) {
     inbetweenTime = millis();
     bluetoothCommunication = true;
+    Serial.println(bluetoothSerial->peek());
     bluetoothRead.concat((char)bluetoothSerial->read());
   }
 
