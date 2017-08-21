@@ -40,6 +40,7 @@ class AlarmController {
     String alarmInfo(int ID);
     void delay(int time);
     int static count();
+    void loop();
     
     FansController fansController;
     

@@ -30,10 +30,12 @@ class BluetoothController {
     const String SET_TIME = "setTime";
     const String GET_FANS = "getFans";
     const String GET_TIME = "getTime";
+    const String GET_INFO = "getInfo";
     const String REMOVE_FAN = "removeFan";
     const String REMOVE_FANS = "removeFans";
     const String MAX_FANS = "maxFans";
     const String AMOUNT_FANS = "amountFans";
+    const String OK_CONN = "OK+CONN";
 
     const int NO_COMMUNICATION_TIME = 50;
     unsigned long inbetweenTime;

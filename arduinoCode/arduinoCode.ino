@@ -4,6 +4,7 @@
 BluetoothController *bluetoothController;
 
 int FansController::speed = 255;
+boolean FansController::fanOn = false;
 
 void setup() {
   Serial.begin(9600);

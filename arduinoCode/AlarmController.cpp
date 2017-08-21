@@ -135,6 +135,10 @@ String AlarmController::onOrOff(boolean input) { //inverse
   }
 }
 
+void AlarmController::loop(){
+  fansController.loop();
+}
+
 void AlarmController::delay(int time) {
   Alarm.delay(time);
 }

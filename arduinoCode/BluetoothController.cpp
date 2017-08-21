@@ -33,23 +33,39 @@ void BluetoothController::loopBluetooth() {
     //rtcController.printTime();
     alarmController.delay(1000);
   }
+  alarmController.loop();
 }
 
 void BluetoothController::action(String input)
 {
-  if (input.equals(FAN_ON)) {
-     alarmController.fansController.on();
+  if (input.equals(OK_CONN)) {
+    alarmController.fansController.onOf();//turn off and on the fan for show
+  }
+  else if (input.equals(GET_INFO)) {
+    Serial.println("send info");
+   // bluetoothSerial->println(FAN_ON + (String)alarmController.fansController.fanOn);
+    //bluetoothSerial->println(FAN_SPEED + (String)alarmController.fansController.getSpeed());
+    bluetoothSerial->println(MAX_FANS + "+" + dtNBR_ALARMS);
+    bluetoothSerial->println(AMOUNT_FANS + "+" + (String)alarmController.count());
+    for (int ID = 0; ID < dtNBR_ALARMS; ID++) {
+      bluetoothSerial->println(alarmController.alarmInfo(ID));
+    }
+    bluetoothSerial->println(rtcController.timeString());
+
+  }
+  else if (input.equals(FAN_ON)) {
+    alarmController.fansController.on();
     bluetoothSerial->println(FAN_ON + OK_RESULT);
   }
   else if (input.equals(FAN_OFF))
   {
-     alarmController.fansController.off();
+    alarmController.fansController.off();
     bluetoothSerial->println(FAN_OFF + OK_RESULT);
   }
-    else if (input.substring(0, FAN_SPEED.length()).equals(FAN_SPEED))
+  else if (input.substring(0, FAN_SPEED.length()).equals(FAN_SPEED))
   {
     String commandString = input.substring(FAN_SPEED.length());
-    
+
     alarmController.fansController.setSpeed(commandString.toInt());
     alarmController.fansController.off();
     alarmController.fansController.on();

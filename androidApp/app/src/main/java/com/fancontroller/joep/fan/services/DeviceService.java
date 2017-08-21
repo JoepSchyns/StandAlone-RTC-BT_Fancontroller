@@ -87,6 +87,8 @@ public class DeviceService {
 
 
                 }
+                bluetoothGatt.setCharacteristicNotification(characteristics.get(characteristics.size() - 1),true);//TODO make fixed
+
 
 
             } else {
@@ -98,6 +100,7 @@ public class DeviceService {
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
+            Log.d(TAG, "onCharacteristicRead: ");
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             }
@@ -106,6 +109,7 @@ public class DeviceService {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
+            Log.d(TAG, "onCharacteristicChanged: ");
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
         }
     };
