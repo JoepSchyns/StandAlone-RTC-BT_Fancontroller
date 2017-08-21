@@ -1,41 +1,34 @@
-package com.fancontroller.joep.fan;
+package com.fancontroller.joep.fan.services;
 
-import android.app.IntentService;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.ParcelUuid;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import static android.bluetooth.BluetoothAdapter.STATE_CONNECTED;
-import static android.bluetooth.BluetoothProfile.STATE_DISCONNECTED;
 import static android.content.ContentValues.TAG;
 
 /**
- * Created by Joep on 19/08/2017.
+ * Created by Joep on 21/08/2017.
  */
 
-public class DeviceConnectService extends IntentService {
+public class DeviceService {
 
-    private BluetoothAdapter bluetoothAdapter;
-
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
-    private int mConnectionState = STATE_DISCONNECTED;
-
+    public static final int STATE_DISCONNECTED = 0;
+    public static final int STATE_CONNECTING = 1;
+    public static final int STATE_CONNECTED = 2;
+    public int connectionState = STATE_DISCONNECTED;
+    public final static String KEY_MAC_INTENT =
+            "KEY_MAC_INTENT";
+    public final static String KEY_VALUE_INTENT =
+            "KEY_MAC_INTENT";
     public final static String ACTION_GATT_CONNECTED =
             "ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
@@ -47,41 +40,27 @@ public class DeviceConnectService extends IntentService {
     public final static String EXTRA_DATA =
             "EXTRA_DATA";
 
-    BluetoothGatt bluetoothGatt;
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     */
-    public DeviceConnectService() {
-        super("worker");
+    private BluetoothDevice device;
+    private BluetoothGatt bluetoothGatt;
+    private Context context;
 
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
-        String mac = extras.getString("MAC");
-
-        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(mac);
-
-
-        bluetoothGatt = device.connectGatt(this,true,bluetoothGattCallback);
-
-
+    public DeviceService(Context context, BluetoothDevice device){
+        this.device = device;
+        this.context = context;
+        bluetoothGatt = device.connectGatt(context,true,bluetoothGattCallback);
 
 
 
     }
 
+    List<BluetoothGattCharacteristic> characteristics;
     BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String intentAction;
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 intentAction = ACTION_GATT_CONNECTED;
-                mConnectionState = STATE_CONNECTED;
+                connectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
@@ -91,7 +70,7 @@ public class DeviceConnectService extends IntentService {
 
             } else if (newState == STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
-                mConnectionState = STATE_DISCONNECTED;
+                connectionState = STATE_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
             }
@@ -99,21 +78,15 @@ public class DeviceConnectService extends IntentService {
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            characteristics = new ArrayList<>();
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
 
-//                for (BluetoothGattService service :gatt.getServices()) {
-//                    for (BluetoothGattCharacteristic characteristic:service.getCharacteristics()) {
-//
-//                        Log.d(TAG, characteristic.getUuid().toString());
-//                        byte ptext[] = "Test".getBytes();
-//                        characteristic.setValue(ptext);
-//                        bluetoothGatt.writeCharacteristic(characteristic);
-//                        bluetoothGatt.setCharacteristicNotification(characteristic,true);
-//
-//                    }
-//
-//                }
+                for (BluetoothGattService service :gatt.getServices()) {
+                    characteristics.addAll(service.getCharacteristics());
+
+
+                }
 
 
             } else {
@@ -137,17 +110,35 @@ public class DeviceConnectService extends IntentService {
         }
     };
 
+    public boolean writeCharacteristics(String text){
+        if(characteristics == null){
+            return false;
+        }
+        BluetoothGattCharacteristic chars = characteristics.get(characteristics.size() - 1); //get the last one since this one should be the serial write //TODO
+        Log.d(TAG, "writeCharacteristics: " + chars.getUuid().toString());
+        chars.setValue(text);
+        bluetoothGatt.writeCharacteristic(chars);
+
+        return true;
+    }
+
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
-        sendBroadcast(intent);
+        intent.putExtra(KEY_MAC_INTENT,device.getAddress());
+        context.sendBroadcast(intent);
     }
 
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
-
-        //TODO implement characteristic
-        sendBroadcast(intent);
+        intent.putExtra(KEY_MAC_INTENT,device.getAddress());
+        intent.putExtra(KEY_VALUE_INTENT,characteristic.getStringValue(0));
+        context.sendBroadcast(intent);
     }
+
+    public BluetoothDevice getDevice(){
+        return bluetoothGatt.getDevice();
+    }
+
 
 }

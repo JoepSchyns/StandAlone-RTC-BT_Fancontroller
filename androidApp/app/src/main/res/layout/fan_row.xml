@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/cardview_default_elevation"
+    app:cardCornerRadius="4dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="@dimen/cardview_default_elevation"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <TextClock
+            android:id="@+id/time"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/imageView"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <Button
+            android:id="@+id/activateButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/remove"
+            android:textColorLink="@android:color/holo_red_dark" />
+
+        <ToggleButton
+            android:id="@+id/removeToggle"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="ToggleButton"
+            android:textOff="@string/activate"
+            android:textOn="@string/deactivate"
+            android:layout_marginStart="19dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/time" />
+
+
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

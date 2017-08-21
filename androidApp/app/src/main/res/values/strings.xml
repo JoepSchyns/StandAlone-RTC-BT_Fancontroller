@@ -3,4 +3,9 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_find_device">Find Device</string>
     <string name="ble_not_supported">Bluetooth low energy(4.0) is not supported on your device</string>
+    <string name="fanOff">Fan off</string>
+    <string name="fanOn">Fan on</string>
+    <string name="activate">Start</string>
+    <string name="deactivate">Stop</string>
+    <string name="remove">remove</string>
 </resources>

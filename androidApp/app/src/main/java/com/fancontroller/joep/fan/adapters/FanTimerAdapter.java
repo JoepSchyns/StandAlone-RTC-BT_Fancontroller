@@ -1,4 +1,4 @@
-package com.fancontroller.joep.fan;
+package com.fancontroller.joep.fan.adapters;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -11,34 +11,39 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.net.URI;
+import com.fancontroller.joep.fan.R;
+import com.fancontroller.joep.fan.services.DeviceConnectService;
+
 import java.util.ArrayList;
 
 /**
- * Created by Joep on 19/08/2017.
+ * Created by Joep on 21/08/2017.
  */
 
-public class DeviceAdapter extends ArrayAdapter<BluetoothDevice> {
-    private BluetoothDevice device;
-    public DeviceAdapter(Context context, ArrayList<BluetoothDevice> devices) {
-        super(context,0, devices);
+public class FanTimerAdapter extends ArrayAdapter {
+
+
+    public FanTimerAdapter(Context context, ArrayList<BluetoothDevice> devices) {
+        super(context,0,devices);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        device = getItem(position);
+        final BluetoothDevice device = (BluetoothDevice) getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.fan_row, parent, false);
         }
         // Lookup view for data population
-        TextView name = (TextView) convertView.findViewById(android.R.id.text1);
+        //TextView name = (TextView) convertView.findViewById(android.R.id.acti);
         TextView mac = (TextView) convertView.findViewById(android.R.id.text2);
         // Populate the data into the template view using the data object
-        name.setText(device.getName());
+        //name.setText(device.getName());
         mac.setText(device.getAddress());
         // Return the completed view to render on screen
+
+        convertView.setTag(device.getAddress());
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

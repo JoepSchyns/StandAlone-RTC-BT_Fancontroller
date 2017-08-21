@@ -1,4 +1,4 @@
-package com.fancontroller.joep.fan;
+package com.fancontroller.joep.fan.activities;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -6,21 +6,29 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
+
+import com.fancontroller.joep.fan.BluetoothDevices;
+import com.fancontroller.joep.fan.R;
+import com.fancontroller.joep.fan.adapters.DeviceAdapter;
+import com.fancontroller.joep.fan.services.DeviceConnectService;
+import com.fancontroller.joep.fan.services.DeviceService;
 
 import java.util.List;
 
@@ -35,6 +43,9 @@ public class FindDevice extends AppCompatActivity {
     private static final long SCAN_PERIOD = 10000;
     private static final int REQUEST_ENABLE_BT = 0;
     private DeviceAdapter deviceAdapter;
+    private DeviceConnectService deviceConnectService;
+    boolean deviceConnectServiceBound = false;
+    private ListView deviceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +55,7 @@ public class FindDevice extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ListView deviceList= (ListView) findViewById(R.id.deviceList);
+        deviceList = (ListView) findViewById(R.id.deviceList);
 
         enableBluetooth();
         handler = new Handler();
@@ -54,12 +65,38 @@ public class FindDevice extends AppCompatActivity {
         deviceAdapter = new DeviceAdapter(this,bluetoothDevices.devices);
         deviceList.setAdapter(deviceAdapter);
 
+        IntentFilter intentFiler = new IntentFilter();
+        intentFiler.addAction(DeviceService.ACTION_DATA_AVAILABLE);
+        intentFiler.addAction(DeviceService.ACTION_GATT_CONNECTED);
+        intentFiler.addAction(DeviceService.ACTION_GATT_DISCONNECTED);
+        intentFiler.addAction(DeviceService.ACTION_GATT_SERVICES_DISCOVERED);
+
+        registerReceiver(broadcastReceiver,intentFiler);
+
 
 
 
 
         bluetoothLeScanner.startScan(scanCallback); //start scanning on activity start
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("test", "onReceive: " + intent.getAction());
+            if(intent.getAction().equals(DeviceService.ACTION_GATT_CONNECTED)){
+                List<BluetoothDevice> devices = deviceConnectService.getConnectedDevices();
+
+                for (BluetoothDevice device: devices) {
+                    Log.d("test", "onReceive: " + device.getAddress());
+                    View v = deviceList.findViewWithTag(device.getAddress());
+                    v.setBackgroundColor(Color.GREEN);
+                }
+
+
+            }
+        }
+    };
 
     private void enableBluetooth(){
         // Initializes Bluetooth adapter.
@@ -129,6 +166,46 @@ public class FindDevice extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
         bluetoothLeScanner.stopScan(scanCallback);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, DeviceConnectService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (deviceConnectServiceBound) {
+            unbindService(mConnection);
+            deviceConnectServiceBound = false;
+        }
+    }
+
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            DeviceConnectService.LocalBinder binder = (DeviceConnectService.LocalBinder) service;
+            deviceConnectService = binder.getService();
+            deviceConnectServiceBound = true;
+            Log.d("test", "onServiceConnected: ");
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            deviceConnectServiceBound = false;
+        }
+    };
 }
