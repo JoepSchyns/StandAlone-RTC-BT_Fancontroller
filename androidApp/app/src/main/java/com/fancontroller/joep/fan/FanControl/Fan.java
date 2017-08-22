@@ -1,11 +1,13 @@
 package com.fancontroller.joep.fan.FanControl;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.fancontroller.joep.fan.activities.Home;
+import com.fancontroller.joep.fan.services.DeviceConnectService;
 import com.fancontroller.joep.fan.services.DeviceService;
 
 import java.util.ArrayList;
@@ -41,6 +43,13 @@ public class Fan {
         this.context = context;
     }
 
+    public Fan(String mac, String name, Context context){
+        this.context = context;
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        bluetoothDevice = bluetoothAdapter.getRemoteDevice(mac);
+
+    }
+
     public boolean hasBluetoothDevice(BluetoothDevice bluetoothDevice){
         return this.bluetoothDevice.getAddress().equals(bluetoothDevice.getAddress());
     }
@@ -53,6 +62,9 @@ public class Fan {
     }
 
     private void placeInfo(String[] infos){ //place infomation fragments in correct places
+        if(infos == null){
+            return;
+        }
         for (String info : infos) {
             String[] keyValue = info.split(PLUS_SIGN);
 
@@ -74,7 +86,7 @@ public class Fan {
                     break;
                 case DeviceService.GET_FAN_TIMER:
                     fanTimers.add(new FanTimer(value));
-                    Log.d("placeInfo", "fanTimers" + value);
+                    Log.d("placeInfo", "fanTimers" + fanTimers.size());
                     break;
                 case DeviceService.AMOUNT_FANS:
                     amountFans = Integer.parseInt(value);
@@ -93,11 +105,12 @@ public class Fan {
     }
 
     private String[] contructInfo(String infoFragment){ //sometimes ln writes for info are not seperated by characteristics read thus info lines have to be constructed from received fragemnts
-        if(infoFragment.isEmpty()){ //nothing retreived
+        String[] segs = infoFragment.split(NEW_LINE);
+        if(infoFragment.isEmpty() || segs.length == 0){ //nothing retreived
             return null;
         }
 
-        String[] segs = infoFragment.split(NEW_LINE);
+
 
         segs[0] = prevInfo + segs[0];//add text from previous read to first segment
         prevInfo = "";
@@ -115,6 +128,21 @@ public class Fan {
         intent.putExtra(KEY_MAC_INTENT,bluetoothDevice.getAddress());
 
         context.sendBroadcast(intent);
+    }
+
+    public boolean equals(Fan fan){
+        return bluetoothDevice.getAddress().equals(fan.bluetoothDevice.getAddress());
+    }
+
+    public void requestDeviceService(){
+        requestDeviceService(context,bluetoothDevice.getAddress(),bluetoothDevice.getName());
+    }
+
+    public static void requestDeviceService(Context context,String mac, String name){
+        Intent intent = new Intent(context, DeviceConnectService.class);
+        intent.putExtra("NAME",name);
+        intent.putExtra("MAC",mac);
+        context.startService(intent);
     }
 
 

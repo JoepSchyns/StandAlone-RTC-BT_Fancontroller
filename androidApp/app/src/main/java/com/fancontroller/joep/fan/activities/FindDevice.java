@@ -23,10 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.fancontroller.joep.fan.BluetoothDevices;
 import com.fancontroller.joep.fan.R;
 import com.fancontroller.joep.fan.adapters.DeviceAdapter;
+import com.fancontroller.joep.fan.data.DB;
 import com.fancontroller.joep.fan.services.DeviceConnectService;
 import com.fancontroller.joep.fan.services.DeviceService;
 
@@ -46,6 +48,7 @@ public class FindDevice extends AppCompatActivity {
     private DeviceConnectService deviceConnectService;
     boolean deviceConnectServiceBound = false;
     private ListView deviceList;
+    private DB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class FindDevice extends AppCompatActivity {
 
         registerReceiver(broadcastReceiver,intentFiler);
 
-
+        db = new DB(getApplicationContext());
 
 
 
@@ -84,13 +87,17 @@ public class FindDevice extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("test", "onReceive: " + intent.getAction());
-            if(intent.getAction().equals(DeviceService.ACTION_GATT_CONNECTED)){
+
+            if(intent.getAction().equals(DeviceService.ACTION_GATT_CONNECTED)){ //connection with new device is succesfull
                 List<BluetoothDevice> devices = deviceConnectService.getConnectedDevices();
 
                 for (BluetoothDevice device: devices) {
                     Log.d("test", "onReceive: " + device.getAddress());
                     View v = deviceList.findViewWithTag(device.getAddress());
-                    v.setBackgroundColor(Color.GREEN);
+                    ( v.findViewById(R.id.progressBar)).setVisibility(View.INVISIBLE);
+                    ( v.findViewById(R.id.check)).setVisibility(View.VISIBLE);
+
+                    db.add(device.getAddress(),device.getName());
                 }
 
 

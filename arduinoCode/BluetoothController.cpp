@@ -31,7 +31,7 @@ void BluetoothController::loopBluetooth() {
     alarmController.delay(0);
   } else {
     //rtcController.printTime();
-    alarmController.delay(1000);
+    alarmController.delay(0);
   }
   alarmController.loop();
 }
@@ -41,7 +41,10 @@ void BluetoothController::action(String input)
 {
   if (input.equals(OK_CONN)) {
     alarmController.manualFanOnOff();//turn off and on the fan for show
+    input = input.substring(OK_CONN.length()); //ok_conn does not have an line ending thus can hold also another command
+    Serial.println("input after ok " + input);
   }
+  
   else if (input.equals(GET_INFO)) {
     Serial.println("send info");
     bluetoothSerial->println(GET_TIME + "+" + rtcController.timeString());

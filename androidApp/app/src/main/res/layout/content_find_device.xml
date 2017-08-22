@@ -12,7 +12,7 @@
 
     <ListView
         android:id="@+id/deviceList"
-        android:layout_width="391dp"
+        android:layout_width="match_parent"
         android:layout_height="519dp"
         tools:layout_editor_absoluteX="-8dp"
         app:layout_constraintBottom_toBottomOf="parent"

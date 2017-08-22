@@ -74,7 +74,18 @@ public class FanController {
         return null;
     }
 
+    public void add(List<Fan> fans){
+        for (Fan fan : fans) {
+            add(fan);
+        }
+    }
+
     public void add(Fan fan){
+        for (Fan controllerFan : fans) {
+                if(controllerFan.equals(fan)){
+                    return;
+                }
+        }
         fans.add(fan);
     }
 }

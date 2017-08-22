@@ -3,12 +3,16 @@ package com.fancontroller.joep.fan.adapters;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.fancontroller.joep.fan.FanControl.Fan;
+import com.fancontroller.joep.fan.R;
 import com.fancontroller.joep.fan.services.DeviceConnectService;
 
 import java.util.ArrayList;
@@ -29,11 +33,12 @@ public class DeviceAdapter extends ArrayAdapter<BluetoothDevice> {
         device = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.device_row, parent, false);
         }
         // Lookup view for data population
-        TextView name = (TextView) convertView.findViewById(android.R.id.text1);
-        TextView mac = (TextView) convertView.findViewById(android.R.id.text2);
+        TextView name = (TextView) convertView.findViewById(R.id.textView1);
+        TextView mac = (TextView) convertView.findViewById(R.id.textView2);
+        final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
         // Populate the data into the template view using the data object
         name.setText(device.getName());
         mac.setText(device.getAddress());
@@ -44,12 +49,17 @@ public class DeviceAdapter extends ArrayAdapter<BluetoothDevice> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), DeviceConnectService.class);
-                intent.putExtra("NAME",device.getName());
-                intent.putExtra("MAC",device.getAddress());
-                v.getContext().startService(intent);
+                progressBar.setVisibility(View.VISIBLE);
+                Fan.requestDeviceService(v.getContext(),device.getAddress(),device.getName());
             }
         });
+
+        int[] attrs = new int[]{R.attr.selectableItemBackground};
+        TypedArray typedArray = convertView.getContext().obtainStyledAttributes(attrs);
+        int backgroundResource = typedArray.getResourceId(0, 0);
+        convertView.setBackgroundResource(backgroundResource);
+        typedArray.recycle();
+
         return convertView;
     }
 }

@@ -62,6 +62,8 @@ public class DeviceService {
     private BluetoothGatt bluetoothGatt;
     private Context context;
 
+    private BluetoothGattCharacteristic charateristic;
+
     public DeviceService(Context context, BluetoothDevice device){
         this.device = device;
         this.context = context;
@@ -102,10 +104,9 @@ public class DeviceService {
 
                 for (BluetoothGattService service :gatt.getServices()) {
                     characteristics.addAll(service.getCharacteristics());
-
-
                 }
-                bluetoothGatt.setCharacteristicNotification(characteristics.get(characteristics.size() - 1),true);//TODO make fixed
+                charateristic = characteristics.get(characteristics.size() - 1);
+                bluetoothGatt.setCharacteristicNotification(charateristic,true);//TODO make fixed
 
 
 
@@ -136,10 +137,10 @@ public class DeviceService {
         if(characteristics == null){
             return false;
         }
-        BluetoothGattCharacteristic chars = characteristics.get(characteristics.size() - 1); //get the last one since this one should be the serial write //TODO
-        Log.d(TAG, "writeCharacteristics: " + chars.getUuid().toString());
-        chars.setValue(text);
-        bluetoothGatt.writeCharacteristic(chars);
+        //BluetoothGattCharacteristic chars = characteristics.get(characteristics.size() - 1); //get the last one since this one should be the serial write //TODO
+        Log.d(TAG, "writeCharacteristics: " + charateristic.getUuid().toString());
+        charateristic.setValue(text);
+        bluetoothGatt.writeCharacteristic(charateristic);
 
         return true;
     }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="214.05mm" height="214.05mm" version="1.1" viewBox="0 0 214.04871 214.05269" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <radialGradient id="radialGradient4741-9-90-5" cx="332.62" cy="191.92" r="102.22" gradientTransform="matrix(.8981 0 0 .8981 -303.26 -99.057)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#00a3b9" stop-opacity="0" offset="0"/>
+   <stop stop-color="#006f7e" stop-opacity=".31765" offset=".79866"/>
+   <stop offset="1"/>
+  </radialGradient>
+ </defs>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(111.56 33.788)">
+  <path d="m-4.5357-33.788c-59.018 0-107.02 48.008-107.02 107.03 0 59.018 48.007 107.03 107.02 107.03 59.018 0 107.02-48.008 107.02-107.03 0-59.018-48.007-107.03-107.02-107.03z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="#00a2ce" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+  <circle cx="-4.5357" cy="73.309" r="91.807" fill="url(#radialGradient4741-9-90-5)" opacity=".213" style="paint-order:stroke fill markers"/>
+  <g transform="matrix(.968 0 0 .96801 -308.49 -616.31)" fill="#000b0d" opacity=".105" stroke-width="1.0331">
+   <path d="m319.14 733.44-18.995 5.2802c-5.5853-48.153 9.114-105.97 46.173-108.63l13.256 14.426-40.435 88.925"/>
+   <path d="m352.94 637.3c-20.146 7.7617-31.434 37.222-43.304 98.778l9.4974-2.6401 40.435-88.925z"/>
+   <path d="m336.14 713.01 5.2802 18.995c-48.153 5.5853-105.97-9.114-108.63-46.173l14.426-13.256 88.925 40.435"/>
+   <path d="m293.95 717.76-5.2802-18.995c48.153-5.5853 105.97 9.114 108.63 46.173l-14.426 13.256-88.925-40.435"/>
+   <path d="m240 679.2c7.7617 20.146 37.222 31.434 98.778 43.304l-2.6401-9.4974-88.925-40.435z"/>
+   <path d="m311.47 699.7 18.995-5.2802c5.5853 48.153-9.114 105.97-46.173 108.63l-13.256-14.426 40.435-88.925"/>
+   <path d="m277.67 795.84c20.146-7.7617 31.434-37.222 43.304-98.778l-9.4974 2.6401-40.435 88.925z"/>
+   <path d="m390.09 751.56c-7.7617-20.146-37.222-31.434-98.778-43.304l2.64 9.4974 88.925 40.435z"/>
+   <circle cx="315.05" cy="714.72" r="25.099" style="paint-order:stroke fill markers"/>
+  </g>
+  <path d="m-2.1646 88.233-18.387 5.1112c-5.4066-46.613 8.8224-102.58 44.696-105.16l12.832 13.965-39.141 86.08" fill="#0ddbf7"/>
+  <path d="m30.56-4.8297c-19.501 7.5134-30.429 36.032-41.918 95.618l9.1935-2.5556 39.141-86.08z" fill="#00bdd6"/>
+  <path d="m14.298 68.452 5.1112 18.387c-46.612 5.4066-102.57-8.8225-105.16-44.696l13.965-12.832 86.079 39.141" fill="#0ddbf7"/>
+  <path d="m-26.542 73.048-5.1112-18.387c46.612-5.4066 102.57 8.8225 105.16 44.696l-13.965 12.832-86.079-39.141" fill="#0ddbf7"/>
+  <path d="m-78.764 35.726c7.5134 19.501 36.031 30.429 95.617 41.919l-2.5556-9.1936-86.079-39.141z" fill="#00bdd6"/>
+  <path d="m-9.581 55.575 18.387-5.1112c5.4066 46.613-8.8224 102.58-44.696 105.16l-12.832-13.965 39.141-86.08" fill="#0ddbf7"/>
+  <path d="m-42.306 148.64c19.501-7.5134 30.429-36.032 41.918-95.618l-9.1935 2.5556-39.141 86.08z" fill="#00bdd6"/>
+  <path d="m66.52 105.77c-7.5133-19.501-36.031-30.429-95.617-41.919l2.5556 9.1936 86.079 39.141z" fill="#00bdd6"/>
+  <ellipse cx="-6.122" cy="70.111" rx="24.296" ry="24.296" fill="#0ddbf7" style="paint-order:stroke fill markers"/>
+  <path d="m-4.5357-33.788c-59.018 0-107.02 48.008-107.02 107.03 0 59.018 48.007 107.03 107.02 107.03 59.018 0 107.02-48.008 107.02-107.03 0-59.018-48.007-107.03-107.02-107.03zm0 15.289c50.755 0 91.735 40.982 91.735 91.737 0 50.755-40.98 91.737-91.735 91.737-50.755 0-91.735-40.982-91.735-91.737s40.98-91.737 91.735-91.737z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="#0ddbf7" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+ </g>
+</svg>

@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -20,13 +21,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextClock;
 import android.widget.Toast;
 
+import com.fancontroller.joep.fan.BluetoothDevices;
 import com.fancontroller.joep.fan.FanControl.Fan;
 import com.fancontroller.joep.fan.FanControl.FanController;
+import com.fancontroller.joep.fan.FanControl.FanTimer;
 import com.fancontroller.joep.fan.R;
+import com.fancontroller.joep.fan.adapters.DeviceAdapter;
+import com.fancontroller.joep.fan.adapters.FanTimerAdapter;
+import com.fancontroller.joep.fan.data.DB;
 import com.fancontroller.joep.fan.services.DeviceConnectService;
 import com.fancontroller.joep.fan.services.DeviceService;
 
@@ -36,11 +43,14 @@ import java.util.List;
 public class Home extends AppCompatActivity {
 
     private DeviceConnectService deviceConnectService;
-    private static TextClock mainClock;
-    private static Switch mainSwitchActive;
+    private TextClock mainClock;
+    private  Switch mainSwitchActive;
+    private ListView mainFanTimers;
+    private FanTimerAdapter fanTimerAdapter;
     private static Fan mainFan;
     boolean deviceConnectServiceBound = false;
     private FanController fanController;
+    private DB db;
 
 
 
@@ -91,8 +101,20 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        mainFanTimers = (ListView) findViewById(R.id.fanTimerList);
 
 
+
+
+        setUpFansFromDatabase();
+    }
+
+    private void setUpFansFromDatabase(){
+        db = new DB(getApplicationContext());
+        List<Fan> storedFans = db.read();
+        for(Fan fan : storedFans){
+            fan.requestDeviceService();
+        }
     }
 
 
@@ -167,6 +189,15 @@ public class Home extends AppCompatActivity {
         if(mainFan != null){
             //setTime //TODO set or always update
             mainSwitchActive.setChecked(mainFan.fanOn);
+
+            if(fanTimerAdapter == null){
+                fanTimerAdapter = new FanTimerAdapter(getApplicationContext(), (ArrayList<FanTimer>) mainFan.fanTimers);
+                mainFanTimers.setAdapter(fanTimerAdapter);
+            }else{
+                fanTimerAdapter.notifyDataSetChanged();
+            }
+
+
         }
     }
 
@@ -199,6 +230,7 @@ public class Home extends AppCompatActivity {
         // Bind to LocalService
         Intent intent = new Intent(this, DeviceConnectService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        updateMainInfo();
 
     }
 

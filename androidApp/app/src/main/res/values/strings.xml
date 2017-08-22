@@ -8,4 +8,5 @@
     <string name="activate">Start</string>
     <string name="deactivate">Stop</string>
     <string name="remove">remove</string>
+    <string name="setSpeed">set speed</string>
 </resources>
