@@ -24,11 +24,12 @@ public class DeviceService {
     public static final int STATE_DISCONNECTED = 0;
     public static final int STATE_CONNECTING = 1;
     public static final int STATE_CONNECTED = 2;
+    public static final String GET_FAN_ON = "GET_FAN_ON";
     public int connectionState = STATE_DISCONNECTED;
     public final static String KEY_MAC_INTENT =
             "KEY_MAC_INTENT";
     public final static String KEY_VALUE_INTENT =
-            "KEY_MAC_INTENT";
+            "KEY_VALUE_INTENT";
     public final static String ACTION_GATT_CONNECTED =
             "ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
@@ -39,6 +40,23 @@ public class DeviceService {
             "ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
             "EXTRA_DATA";
+
+    public final static String OK_RESULT = "+OK";
+    public final static String ERROR_RESULT = "+ERROR";
+    public final static String MAX_FANS_RESULT = "+MAX_FANS_ERROR";
+    public final static String FAN_ON = "fanOn";
+    public final static String FAN_OFF = "fanOff";
+    public final static String SET_FAN = "setFan";
+    public final static String SET_TIMER_FAN = "setTimerFan";
+    public final static String SET_TIME = "setTime";
+    public final static String GET_FANS = "getFans";
+    public final static String GET_TIME = "getTime";
+    public final static String GET_INFO = "getInfo";
+    public final static String REMOVE_FAN = "removeFan";
+    public final static String REMOVE_FANS = "removeFans";
+    public final static String MAX_FANS = "maxFans";
+    public final static String AMOUNT_FANS = "amountFans";
+    public final static String GET_FAN_TIMER = "getFanTimer";
 
     private BluetoothDevice device;
     private BluetoothGatt bluetoothGatt;

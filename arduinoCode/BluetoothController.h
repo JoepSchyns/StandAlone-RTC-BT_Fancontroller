@@ -24,11 +24,13 @@ class BluetoothController {
 
     const String FAN_ON = "fanOn";
     const String FAN_OFF = "fanOff";
+    const String GET_FAN_ON = "GET_FAN_ON";
     const String SET_FAN = "setFan";
     const String SET_TIMER_FAN = "setTimerFan";
     const String SET_TIME = "setTime";
     const String GET_FANS = "getFans";
     const String GET_TIME = "getTime";
+    const String GET_FAN_TIMER = "getFanTimer";
     const String GET_INFO = "getInfo";
     const String REMOVE_FAN = "removeFan";
     const String REMOVE_FANS = "removeFans";

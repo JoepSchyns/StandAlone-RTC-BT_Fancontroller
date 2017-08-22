@@ -19,6 +19,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextClock;
 import android.widget.Toast;
 
 import com.fancontroller.joep.fan.FanControl.Fan;
@@ -33,6 +36,9 @@ import java.util.List;
 public class Home extends AppCompatActivity {
 
     private DeviceConnectService deviceConnectService;
+    private static TextClock mainClock;
+    private static Switch mainSwitchActive;
+    private static Fan mainFan;
     boolean deviceConnectServiceBound = false;
     private FanController fanController;
 
@@ -65,13 +71,31 @@ public class Home extends AppCompatActivity {
         intentFiler.addAction(DeviceService.ACTION_GATT_CONNECTED);
         intentFiler.addAction(DeviceService.ACTION_GATT_DISCONNECTED);
         intentFiler.addAction(DeviceService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFiler.addAction(Fan.NEW_INFO);
 
         registerReceiver(broadcastReceiver,intentFiler);
 
-        fanController = new FanController();
+        fanController = new FanController(getApplicationContext());
+
+        mainClock = (TextClock)findViewById(R.id.mainClock);
+        mainSwitchActive = (Switch)findViewById(R.id.mainSwitchActive);
+        mainSwitchActive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                String action = DeviceService.FAN_OFF;
+                if(isChecked){
+                    action = DeviceService.FAN_ON;
+                }
+                mainFan.fanOn = isChecked;
+                deviceConnectService.writeTo(mainFan.bluetoothDevice.getAddress(),action);
+            }
+        });
+
 
 
     }
+
+
 
     private void setupBluetooth() {
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -107,14 +131,20 @@ public class Home extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
         Log.d("test", "onReceive: " + intent.getAction());
-        if(intent.getAction().equals(DeviceService.ACTION_GATT_CONNECTED)){
+        if(intent.getAction().equals(DeviceService.ACTION_GATT_SERVICES_DISCOVERED)){
             List<BluetoothDevice> bluetoothDevices = deviceConnectService.getConnectedDevices();
             createNewFans(bluetoothDevices);
         }else if (intent.getAction().equals(DeviceService.ACTION_DATA_AVAILABLE)){
-            Bundle bundle = intent.getExtras();
-            String mac = bundle.getString(DeviceService.KEY_MAC_INTENT);
-            String value = bundle.getString(DeviceService.KEY_VALUE_INTENT);
+
+            String mac = intent.getStringExtra(DeviceService.KEY_MAC_INTENT);
+            String value = intent.getStringExtra(DeviceService.KEY_VALUE_INTENT);
             fanController.setInfo(mac,value);
+        }else if(intent.getAction().equals(Fan.NEW_INFO)){ //if there is new fan info update fields
+
+            //String mac = intent.getStringExtra(DeviceService.KEY_MAC_INTENT);
+
+                updateMainInfo();
+
         }
 
         }
@@ -125,9 +155,18 @@ public class Home extends AppCompatActivity {
         List<BluetoothDevice> newBluetoothDevices = fanController.notInFanControllerList(bluetoothDevices);
         Log.d("test", "createNewFans: connected new devices " + newBluetoothDevices.size());
         for (BluetoothDevice device: newBluetoothDevices) {
-            deviceConnectService.writeTo(device.getAddress(),"getInfo"); //request information about the fan
-            Log.d("test", "createNewFans: new device " + device.getAddress());
-            fanController.add(device);
+            Fan fan  = new Fan(device,getApplicationContext());
+            mainFan = fan;
+            fanController.add(fan);
+            deviceConnectService.writeTo(device.getAddress(),DeviceService.GET_INFO); //request information about the fan
+
+        }
+    }
+
+    public void updateMainInfo(){
+        if(mainFan != null){
+            //setTime //TODO set or always update
+            mainSwitchActive.setChecked(mainFan.fanOn);
         }
     }
 

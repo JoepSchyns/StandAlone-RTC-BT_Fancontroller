@@ -99,18 +99,18 @@
                     android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
                 <TextClock
-                    android:id="@+id/textClock3"
+                    android:id="@+id/mainClock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/relativeLayout"
                     android:layout_below="@+id/textView" />
 
                 <Switch
-                    android:id="@+id/switch2"
+                    android:id="@+id/mainSwitchActive"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/relativeLayout"
-                    android:layout_below="@+id/textClock3"
+                    android:layout_below="@+id/mainClock"
                     android:text="Fan Active " />
 
 

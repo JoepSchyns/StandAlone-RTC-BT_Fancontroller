@@ -82,7 +82,6 @@ int AlarmController::setAlarm(int DayOfWeek, int Hour, int Minute, int Second, i
 void AlarmController::removeAlarms() {
   for (int id = 0; id < dtNBR_ALARMS; id++) {
     Alarm.free(id);
-    removeAlarm(id);
   }
   saveAlarms();
 }
@@ -98,7 +97,7 @@ boolean AlarmController::saveAlarms() {
 }
 
 String AlarmController::alarmInfo(int ID) {
-  String result = "Fan;" + (String)ID;
+  String result = "getFanTimer+" + (String)ID; //TODO dehard-code
   result += ";" + (String)Alarm.Alarm[ID].Mode.isEnabled;
   result += ";" + (String)Alarm.Alarm[ID].Mode.alarmType;
   result += ";" + RTCController::time_tReadable(Alarm.Alarm[ID].value);
