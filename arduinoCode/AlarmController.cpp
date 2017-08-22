@@ -45,7 +45,7 @@ int AlarmController::setAlarm(StringSplitter *command) {
 }
 
 int AlarmController::setAlarm(int Hour, int Minute, int Second, int speed) {
-  
+
   int id = Alarm.alarmRepeat(Hour, Minute, Second, callback, speed);
   return id;
 }
@@ -98,7 +98,7 @@ boolean AlarmController::saveAlarms() {
 }
 
 String AlarmController::alarmInfo(int ID) {
-  String result = "Fan;" + (String)ID; 
+  String result = "Fan;" + (String)ID;
   result += ";" + (String)Alarm.Alarm[ID].Mode.isEnabled;
   result += ";" + (String)Alarm.Alarm[ID].Mode.alarmType;
   result += ";" + RTCController::time_tReadable(Alarm.Alarm[ID].value);
@@ -137,20 +137,20 @@ int static AlarmController::count() {
   return Alarm.count();
 }
 
-void AlarmController::manualFanOn(){
+void AlarmController::manualFanOn() {
   fansController.on();
 }
 
-void AlarmController::manualFanOff(){
+void AlarmController::manualFanOff() {
   fansController.off();
 }
 
-void AlarmController::manualFanOnOff(){
+void AlarmController::manualFanOnOff() {
   fansController.onOff();
 }
 
 static void AlarmController::callback() {
-      int id = Alarm.getTriggeredAlarmId();
+  int id = Alarm.getTriggeredAlarmId();
   int speed = Alarm.Alarm[id].data;
   FansController::fan(speed);
 }

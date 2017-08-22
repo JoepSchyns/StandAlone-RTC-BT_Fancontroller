@@ -3,7 +3,7 @@
 #include "BluetoothController.h"
 BluetoothController *bluetoothController;
 
-int FansController::speed = 255;
+int FansController::speed = 0;
 boolean FansController::fanOn = false;
 
 void setup() {

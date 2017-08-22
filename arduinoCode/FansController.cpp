@@ -18,13 +18,10 @@ static void FansController::off() {
 }
 
 
-static void FansController::fan(int speed) {
-  fanOn = (speed > 0);
-  analogWrite(FAN_PIN, speed);
-}
-
-void FansController::setSpeed(int _speed) {
-  speed = _speed;
+static void FansController::fan(int speed_) {
+  fanOn = (speed_ > 0);
+  speed = speed_;
+  analogWrite(FAN_PIN, speed_);
 }
 
 void FansController::getSpeed() {
@@ -33,7 +30,7 @@ void FansController::getSpeed() {
 
 
 void FansController::onOff() {
-  oldFanOn = fanOn;
+  oldSpeed = speed;
   if (fanOn) {
     off();
   } else {
@@ -47,7 +44,7 @@ void FansController::loop() {
 
   if (onOfEnabled && onOfTimer + INBETWEEN_ON_OF < millis()) {
     onOfEnabled = false;
-    fan(oldFanOn);//reset to previous state
+    fan(oldSpeed);//reset to previous state
   }
 
 }

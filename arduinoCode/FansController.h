@@ -15,7 +15,7 @@ class FansController {
   public:
     FansController();
     static boolean fanOn;
-    boolean oldFanOn;
+    int oldSpeed;
     static void on();
     static void off();
     static void callback();
