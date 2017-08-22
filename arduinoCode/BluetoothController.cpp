@@ -39,7 +39,7 @@ void BluetoothController::loopBluetooth() {
 void BluetoothController::action(String input)
 {
   if (input.equals(OK_CONN)) {
-    alarmController.fansController.onOf();//turn off and on the fan for show
+    alarmController.manualFanOnOff();//turn off and on the fan for show
   }
   else if (input.equals(GET_INFO)) {
     Serial.println("send info");
@@ -54,22 +54,13 @@ void BluetoothController::action(String input)
 
   }
   else if (input.equals(FAN_ON)) {
-    alarmController.fansController.on();
+    alarmController.manualFanOn();
     bluetoothSerial->println(FAN_ON + OK_RESULT);
   }
   else if (input.equals(FAN_OFF))
   {
-    alarmController.fansController.off();
+    alarmController.manualFanOff();
     bluetoothSerial->println(FAN_OFF + OK_RESULT);
-  }
-  else if (input.substring(0, FAN_SPEED.length()).equals(FAN_SPEED))
-  {
-    String commandString = input.substring(FAN_SPEED.length());
-
-    alarmController.fansController.setSpeed(commandString.toInt());
-    alarmController.fansController.off();
-    alarmController.fansController.on();
-    bluetoothSerial->println(FAN_SPEED + OK_RESULT);
   }
   else if (input.equals(MAX_FANS))
   {
@@ -121,14 +112,14 @@ void BluetoothController::action(String input)
   }
   else if (input.substring(0, SET_TIMER_FAN.length()).equals(SET_TIMER_FAN))
   {
-    String commandString = input.substring(SET_TIMER_FAN.length());
-    StringSplitter *command = new StringSplitter(commandString, ':', 6);
-
-    int code = alarmController.setTimer(command);
-    String result = fanCodeToString(code);
-    bluetoothSerial->println(result);
-    delete command;
-    command = NULL;
+//    String commandString = input.substring(SET_TIMER_FAN.length());
+//    StringSplitter *command = new StringSplitter(commandString, ':', 6);
+//
+//    int code = alarmController.setTimer(command);
+//    String result = fanCodeToString(code);
+//    bluetoothSerial->println(result);
+//    delete command;
+//    command = NULL;
   }
   else if (input.substring(0, REMOVE_FANS.length()).equals(REMOVE_FANS))
   {

@@ -23,7 +23,6 @@ class BluetoothController {
     const String MAX_FANS_RESULT = "+MAX_FANS_ERROR";
 
     const String FAN_ON = "fanOn";
-    const String FAN_SPEED = "fanSpeed";
     const String FAN_OFF = "fanOff";
     const String SET_FAN = "setFan";
     const String SET_TIMER_FAN = "setTimerFan";

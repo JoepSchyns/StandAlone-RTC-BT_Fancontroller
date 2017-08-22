@@ -8,47 +8,49 @@ FansController::FansController() {
 
 }
 
+
 static void FansController::on() {
-  fan(true);
+  fan(255);
 }
 
 static void FansController::off() {
-  fan(false);
+  fan(0);
 }
 
 
-static void FansController::fan(boolean on) {
-  fanOn = on;
-  Serial.print("fan on: ");
-  Serial.println(on);
-  if (on) {
-    analogWrite(FAN_PIN, speed);
-  } else {
-    analogWrite(FAN_PIN, 0);
-  }
+static void FansController::fan(int speed) {
+  fanOn = (speed > 0);
+  analogWrite(FAN_PIN, speed);
 }
 
-void FansController::setSpeed(int _speed){
+void FansController::setSpeed(int _speed) {
   speed = _speed;
 }
 
-void FansController::getSpeed(){
+void FansController::getSpeed() {
   return speed;
 }
 
 
-void FansController::onOf(){
-  on();
+void FansController::onOff() {
+  oldFanOn = fanOn;
+  if (fanOn) {
+    off();
+  } else {
+    on();
+  }
   onOfEnabled = true;
   onOfTimer = millis();
 }
 
-void FansController::loop(){
+void FansController::loop() {
 
-  if(onOfEnabled && onOfTimer + INBETWEEN_ON_OF < millis()){
+  if (onOfEnabled && onOfTimer + INBETWEEN_ON_OF < millis()) {
     onOfEnabled = false;
-    off();
+    fan(oldFanOn);//reset to previous state
   }
-  
+
 }
+
+
 
