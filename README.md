@@ -37,7 +37,7 @@ Remove all fan timers
 * **removeFans**    Return format: removeFans+OK
 
 Get the current set fan timer     
- * **getFans**    Return format: getFanTimer+{ID};{TYPE};{HOUR:MINUTE:SECOND};{SPEED}
+ * **getFans**    Return format: getFanTimer+{ID};{ENABLED};{TYPE};{HOUR:MINUTE:SECOND};{SPEED}
  
  Get Max amount of fan Timer
  * **maxFans**    Return format: maxFans+{AMOUNT}
