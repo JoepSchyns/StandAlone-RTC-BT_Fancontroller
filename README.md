@@ -28,7 +28,7 @@ Set the fan speed (between 0 and 255) on a day of the week on a specific time
 
 
 Set the fan speed (between 0 and 255) of the fan on a specific time
-* **SetFan{HOUR}:{MINUTE}:{SECOND}:{SPEED}**    Return format: setFan{DAY}:{HOUR}:{MINUTE}:{SECOND}:{SPEED}
+* **setFan{HOUR}:{MINUTE}:{SECOND}:{SPEED}**    Return format: setFan{DAY}:{HOUR}:{MINUTE}:{SECOND}:{SPEED}
 
 Remove fan timer
 * **removeFan{ID}**   Return format: removeFan{ID}+OK
