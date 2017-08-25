@@ -6,8 +6,8 @@ Stand-alone fan controller with realtime clock and adjustable via bluetooth
 Replace {TEXT} by the desired input
 
 ### Manual Control
-Turn the fan on
-* **fanOn**   Return format: fanOn+OK
+Set the fan speed (between 0 and 255)
+* **fanOn{SPEED}**   Return format: fanOn+{SPEED}+OK
 
 Turn the fan off
 * **fanOff**    Return format: fanOff+OK
